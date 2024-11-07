@@ -7,6 +7,6 @@ db_access:
     username: postgres
     password: postgres
     database: postgres
-    table: rilievi_telecamere_test2
+    table: table
 
 

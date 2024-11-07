@@ -4,7 +4,7 @@ db_access:
     username: postgres
     password: postgres
     database: postgres
-    table: rilievi_telecamere
+    table: table
 
 slit_character : '-->'
 
