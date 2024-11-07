@@ -1,0 +1,15 @@
+db_access:
+    host: localhost
+    port: 5432
+    username: postgres
+    password: postgres
+    database: postgres
+    table: rilievi_telecamere
+
+slit_character : '-->'
+
+query_filter:
+    giorno: '2019-01-01-->2019-02-01'
+    inizio_rilievo-->fine_rilievo: '00:00:00-->00:50:00'
+    veicoli: 33--> 56
+    v_media_in_kmh: 95-->100

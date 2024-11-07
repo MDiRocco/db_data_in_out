@@ -1,0 +1,12 @@
+loading_data_folder_path: admin_import_data_loading
+complete_data_folder_path: admin_import_data_complete
+
+db_access:
+    host: localhost
+    port: 5432
+    username: postgres
+    password: postgres
+    database: postgres
+    table: rilievi_telecamere_test2
+
+
