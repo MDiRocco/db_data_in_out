@@ -161,8 +161,6 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-#Data
-system_folder/admin_import_data_loading/*
-system_folder/admin_import_data_complete/*
+#Data file and folders
 system_folder/EXPORT*.xlsx
 
