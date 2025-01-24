@@ -20,11 +20,11 @@ def check_process(cnf_file):
     with open(cnf_file, 'r') as conf_file:
         config_file = yaml.safe_load(conf_file)
 
-    loading_data_path = Path().absolute().parent / 'system_folder' / config_file['loading_data_folder_path']
+    loading_data_path = Path(__file__).parent.parent / 'system_folder' / config_file['loading_data_folder_path']
     files_to_load = os.listdir(loading_data_path)
 
     if not files_to_load:
-        logging.warning('{0} Empty directory'.format(loading_data_path))
+        logging.warning(f'{loading_data_path} Empty directory')
         return False
     not_allowed = []
     for data_file in files_to_load:
@@ -34,7 +34,7 @@ def check_process(cnf_file):
         else:
             not_allowed.append(data_file)
     if not_allowed:
-        logging.warning('Some data files are not allowed: {0}'.format(not_allowed))
+        logging.warning(f'Some data files are not allowed: {not_allowed}')
 
     logging.warning('No File Allowed Found')
     return False
@@ -48,10 +48,10 @@ def initialization(conf_file):
 
     """
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)  # noqa:WPS323
-    config_base_path = Path().absolute() / 'config'
+    config_base_path = Path(__file__).parent / 'config'
 
     if str(conf_file).endswith('yml'):
         if check_process(config_base_path / conf_file):
             getter_file_process(conf_file)
     else:
-        logging.warning('Config Files Not Allowed: {0}'.format(conf_file))
+        logging.warning(f'Config Files Not Allowed: {conf_file}')

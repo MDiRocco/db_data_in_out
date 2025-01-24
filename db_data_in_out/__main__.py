@@ -3,11 +3,12 @@
 import logging
 from pathlib import Path
 
-import typer
+import fire
+# import typer
 from check_service import initialization
 from export_service import export_initialization
 
-app = typer.Typer()
+# app = typer.Typer()
 
 
 def check_input_file(input_file):
@@ -19,7 +20,8 @@ def check_input_file(input_file):
     Returns:
         The path of the file or None
     """
-    config_base_path = Path().absolute().parent / 'config'
+    config_base_path = Path(__file__).parent.parent / 'config'
+
     conf_file = config_base_path / input_file
 
     if Path(input_file).exists():
@@ -28,8 +30,9 @@ def check_input_file(input_file):
         return conf_file
 
 
-@app.command()
-def check_new_file(input_file: str = typer.Option('load_config.yml', help='Path for the configuration files.')) -> bool:
+# @app.command()
+# def check_new_file(input_file: str = typer.Option('load_config.yml', help='Path for the configuration files.')) -> bool:
+def check_new_file(input_file: str = 'load_config.yml') -> bool:
     """Check if there is new file to load.
 
     Args:
@@ -42,11 +45,12 @@ def check_new_file(input_file: str = typer.Option('load_config.yml', help='Path 
     if config_file:
         return initialization(config_file)
     else:
-        logging.error('File not found: {0}'.format(input_file))
+        logging.error(f'File not found: {input_file}')
 
 
-@app.command()
-def export(input_file: str = typer.Option('export_config.yml', help='Path for the configuration files.')) -> bool:
+# @app.command()
+# def export(input_file: str = typer.Option('export_config.yml', help='Path for the configuration files.')) -> bool:
+def export(input_file: str = 'export_config.yml') -> bool:
     """Export service.
 
     Args:
@@ -59,9 +63,13 @@ def export(input_file: str = typer.Option('export_config.yml', help='Path for th
     if config_file:
         return export_initialization(config_file)
     else:
-        logging.error('File not found: {0}'.format(input_file))
+        logging.error(f'File not found: {input_file}')
 
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)  # noqa:WPS323
-    app()
+    # app()
+    fire.Fire({
+        'export': export,
+        'check_new_file': check_new_file,
+    })

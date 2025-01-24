@@ -17,26 +17,22 @@ def db_connection(config):
     Returns:
         psycopg2.extensions.connection: Connection object
     """
-    db = create_engine('postgresql://{0}:{1}@{2}:{3}/{4}'.format(
-        config['username'],
-        config['password'],
-        config['host'],
-        config['port'],
-        config['database'],
-    ))
+    db = create_engine(
+        f"postgresql://{config['username']}:{config['password']}@{config['host']}:{config['port']}/{config['database']}"
+    )
 
     try:
         connection = db.connect()
     except exc.OperationalError as err:
         logging.error(err)
-
         return 0
 
+    logging.info('Connection established')
     inspector = inspect(connection)
     table_exists = inspector.has_table(config['table'])
     if table_exists:
         return connection
-    logging.error('Table "{0}" not Found in DB, check the configuration file'.format(config['table']))
+    logging.error(f'Table "{config['table']}" not Found in DB, check the configuration file')
     return 0
 
 
@@ -69,8 +65,8 @@ def getter_file_process(config_file):
     with open(config_file, 'r') as conf_file:
         config_file = yaml.safe_load(conf_file)
 
-    loading_folder = Path().absolute().parent / 'system_folder' / config_file['loading_data_folder_path']
-    complete_folder = Path().absolute().parent / 'system_folder' / config_file['complete_data_folder_path']
+    loading_folder = Path(__file__).parent.parent / 'system_folder' / config_file['loading_data_folder_path']
+    complete_folder = Path(__file__).parent.parent / 'system_folder' / config_file['complete_data_folder_path']
     connection = db_connection(config_file['db_access'])
     if connection:
         for data_file in os.listdir(loading_folder):
@@ -79,8 +75,8 @@ def getter_file_process(config_file):
                 new_path = Path(complete_folder) / data_file
                 loading = load_data(data_path, connection, config_file['db_access'])
                 if loading:
-                    logging.info('Data from "{0}" saves successfully\n'.format(data_path))
+                    logging.info(f'Data from "{data_path}" saves successfully\n')
                     os.rename(data_path, new_path)
-                    logging.info('File "{0}" moved to "{1}"'.format(data_path, new_path))
+                    logging.info(f'File "{data_path}" moved to "{new_path}"')
                 else:
-                    logging.error('Loading failed, file: {0}'.format(data_path))
+                    logging.error(f'Loading failed, file: {data_path}')
